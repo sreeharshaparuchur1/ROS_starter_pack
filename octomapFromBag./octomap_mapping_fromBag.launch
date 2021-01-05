@@ -1,0 +1,29 @@
+<!-- 
+  Example launch file for octomap_server mapping: 
+  Listens to incoming PointCloud2 data and incrementally builds an octomap. 
+  The data is sent out in different representations. 
+
+  Copy this file into your workspace and adjust as needed, see
+  www.ros.org/wiki/octomap_server for details  , check out this link to see what parameters mean and how you can tweak them for your needs.
+  As this is meant to be an introduction, I've kept the parameters in the launch file to the bare minimum. Feel free to experiment though!
+-->
+<launch>
+	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+		<param name="resolution" value="1" />
+		
+		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+		<param name="frame_id" type="string" value="map" />\
+    # As of now, this doesn't matter as we're not building a "SLAM system"
+		
+		<!-- maximum range to integrate (speedup!) -->
+		<param name="sensor_model/max_range" value="120.0" />
+    # As the KITTI LiDAR delivers an accurate depth reading upto 120m
+		
+		<!-- data source to integrate (PointCloud2) -->
+		<remap from="cloud_in" to="/kitti/velo/pointcloud" />
+    # remapping the cloud_in parameter of the octomap_mapping node to the pointcloud2 message from our bagfile
+
+		<param name="latch" value="false"/>
+	
+	</node>
+</launch>
